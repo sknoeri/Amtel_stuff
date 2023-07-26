@@ -11,4 +11,6 @@ void uart_sendU16(unsigned short val);
 void uart_sendS16(unsigned short val);
 void uart_sendfVal(float val);
 void uart_sendhex8(unsigned char val);
+unsigned char uart_read_count(void);
+unsigned char uart_read(void);
 #endif /*UART_HAL_*/

@@ -1,10 +1,19 @@
 #include "../includs/uart_hal.h"
 #define F_CPU 16000000U
+#define BUFFER_SIZE 128
 volatile static unsigned char uart_tx_busy = 1;
+volatile static unsigned char rx_buffer[BUFFER_SIZE] = {0};
+volatile static unsigned char rx_count = 0; // indicates how many data bytes are in the buffer
 // 1 is not busy and 0 is busy
 
 ISR(USART_RX_vect){//Recive interrupt vector
-
+    static unsigned char rx_read_count=0;
+    rx_buffer[rx_read_count] = UDR0;
+    rx_read_count++;
+    rx_count++;
+    if(rx_read_count>=BUFFER_SIZE){
+        rx_read_count = 0;
+    }
 }
 ISR(USART_TX_vect){ //Transmit interrupt vector interups is fired when transmision is complet
     uart_tx_busy=1;
@@ -199,4 +208,20 @@ void uart_sendhex8(unsigned char val){
     uart_send_byte(upperNibble);
     uart_send_byte(lowerNibble);
 }
+
+unsigned char uart_read_count(void){
+    return rx_count;
+}
+
+unsigned char uart_read(void){
+    static unsigned char rx_read_pos = 0;
+    unsigned char data;
+    data = rx_buffer[rx_read_pos];
+    rx_read_pos++;
+    rx_count--;
+    if (rx_read_pos>=BUFFER_SIZE){
+        rx_read_pos = 0;
+    }
+    return data;
+} 
 
