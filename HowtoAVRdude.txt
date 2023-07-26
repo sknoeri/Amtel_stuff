@@ -1,0 +1,13 @@
+go to: C:\Program Files (x86)\Arduino\hardware\tools\avr\bin
+
+.\avrdude to run avrdude
+-C ..\etc\avrdude.conf to set the configuration file
+-v for verbose
+-p atmega328p for arduino une -p ? to get more info
+-c usbtyny --> depends on the programmer we are using
+-U flash or lfuse etc:w:file.ihex.i w for write 
+
+"C:\Program Files (x86)\Arduino\hardware\tools\avr\etc\avrdude.conf" path
+
+
+avrdude -C "C:\Program Files (x86)\Arduino\hardware\tools\avr\etc\avrdude.conf" -v -p atmega328p -c arduino -PCOM5 -b115200 -U flash:w:a.hex:i
