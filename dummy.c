@@ -10,10 +10,12 @@
 #define DDRB    *((volatile unsigned char*) 0x24)
 
 
+
+
 int main() {
   DDRB = 32;
   while(1){
-    PORTB =32;
+    PORTB = 32;
     for (long i = 0; i < 100000; i++)
     {
     PORTB =32;
