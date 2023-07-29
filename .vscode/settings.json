@@ -4,6 +4,7 @@
         "vcruntime.h": "c",
         "uart_hal.h": "c",
         "iom328p.h": "c",
-        "interrupt.h": "c"
+        "interrupt.h": "c",
+        "spi_hal.h": "c"
     }
 }

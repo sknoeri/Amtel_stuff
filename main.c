@@ -3,6 +3,7 @@
 #include "includs/interrupt.h"
 #include "includs/uart_hal.h"
 //#include "includs/wire_hal.h"
+//#include "includs/spi_hal.h"
 
 
 /*#define DDRD    *((volatile unsigned char*) 0x2A)
