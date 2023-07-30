@@ -30,11 +30,11 @@ static void spi_send_byte(unsigned char *tx, unsigned char *rx){
         *rx = spi_rx_data; // reads the SPDR register
     }
 }
-// muss chip select machen, data, reg , lenge
+// function must be acessed like unsided char p[6]="Hallo" spi_transfer(&p[0],..,6)
 void spi_transfer(unsigned char *tx, unsigned char *rx, unsigned char len){
     SPI_PORT &=~(1<<SS);
     for (unsigned char i = 0; i < len; i++){
-        spi_send_byte(&tx[i],&rx[i]);
-    }
+        spi_send_byte(&tx[i],&rx[i]);   // taking tx[0] is equivaltent to *(tx) tx[1] = *(tx+1) so derefences the next meomry allocation
+    }                                   // so ouer actual value store to the meory tx+1 or tx+0.
     PORTB |= (1<<SS);
 }

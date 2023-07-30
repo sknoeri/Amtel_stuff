@@ -3,7 +3,7 @@
 #include "includs/interrupt.h"
 #include "includs/uart_hal.h"
 //#include "includs/wire_hal.h"
-//#include "includs/spi_hal.h"
+#include "includs/spi_hal.h"
 
 
 /*#define DDRD    *((volatile unsigned char*) 0x2A)
@@ -27,10 +27,13 @@ int main() {
   //Set the interuupt
   TIMSK1 |=(1<<TOIE1);
   uart_init(9600,0);
+  spi_master_init();
 
   //enalbe interrupts
   sei();
-
+  //char *h = "Hallo" ;
+  unsigned char a[4] = {23,3,4,4};
+  unsigned char b[4];
   //OCR0A=200;
   //TCCR0A=0;
   //TCCR0B=0;
@@ -46,6 +49,7 @@ int main() {
   uart_sendfVal(-99219.345);
   uart_send_byte('\n');
   uart_sendhex8(0x88);
+  spi_transfer(&a[0],&b[0],4);
   
   while(1){
     //for (long i = 0; i < 500000; i++){PORTB |=(1<<5);}

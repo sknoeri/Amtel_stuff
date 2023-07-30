@@ -11,7 +11,8 @@ default: compile uploade clean
 compile:
 	$(COMPILE_NO_LINK) main.c -o main.o
 	$(COMPILE_NO_LINK) scrs/uart_hal.c -o uart_hal.o
-	$(COMPILE) main.o uart_hal.o -o $(FILE_NAME).out
+	$(COMPILE_NO_LINK) scrs/spi_hal.c -o spi_hal.o
+	$(COMPILE) main.o uart_hal.o spi_hal.o -o $(FILE_NAME).out
 #Wall truns wrnings on -Os opimisating code
 	avr-objcopy -O ihex -j.text -j.data $(FILE_NAME).out $(FILE_NAME).hex
 #hexdump $(FILE_NAME).hex

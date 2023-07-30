@@ -43,9 +43,9 @@ void uart_send_byte(unsigned char data){
     UDR0 = data;
 }
 void uart_send_string(char *data){
-    while(*data > 0){
-        uart_send_byte(*data++);
-    }
+    while(*data > 0){ // a string can be understood like a pointer: cahr *p = "Hallo"
+        uart_send_byte(*data++); // a string can be understood like an char p[6] = "Hallo"
+    } // *data++ increments the pointer and returns its old value
 }
 
 void uart_sendU16(unsigned short val){
