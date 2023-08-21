@@ -11,3 +11,5 @@ go to: C:\Program Files (x86)\Arduino\hardware\tools\avr\bin
 
 
 avrdude -C "C:\Program Files (x86)\Arduino\hardware\tools\avr\etc\avrdude.conf" -v -p atmega328p -c arduino -PCOM5 -b115200 -U flash:w:a.hex:i
+
+avrdude -C "C:\Program Files (x86)\Arduino\hardware\tools\avr\etc\avrdude.conf" -v -patmega328p -carduino -PCOM4 -b115200 -U flash:r:old_prog.hex:i // reads the flash

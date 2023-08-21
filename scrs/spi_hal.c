@@ -30,7 +30,8 @@ static void spi_send_byte(unsigned char *tx, unsigned char *rx){
         *rx = spi_rx_data; // reads the SPDR register
     }
 }
-// function must be acessed like unsided char p[6]="Hallo" spi_transfer(&p[0],..,6)
+// function can be acessed like unsided char p[6]="Hallo" spi_transfer(&p[0],..,6)
+// or can be accessed by putting just p into it an array is technically a pointer to the memory of the first place of the array
 void spi_transfer(unsigned char *tx, unsigned char *rx, unsigned char len){
     SPI_PORT &=~(1<<SS);
     for (unsigned char i = 0; i < len; i++){

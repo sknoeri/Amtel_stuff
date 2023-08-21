@@ -2,7 +2,7 @@
 #define WIRE_HAL_
 #include "iom328p.h"
 #include "interrupt.h"
-#include "includs/uart_hal.h"
+
 #define F_CPU 16000000U
 #define WIRE_TIMEOUT F_CPU/10000U
 
