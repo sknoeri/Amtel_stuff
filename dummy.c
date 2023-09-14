@@ -9,6 +9,18 @@
 #define PORTB   *((volatile unsigned char*) 0x25)
 #define DDRB    *((volatile unsigned char*) 0x24)
 
+/*struct PORT{
+  unsigned char PORT0;
+  unsigned char PORT1;
+  unsigned char PORT2;
+  unsigned char PORT3;
+  unsigned char PORT4;
+  unsigned char PORT5;
+  unsigned char PORT6;
+  unsigned char PORT7;
+};*/
+
+
 
 
 

@@ -49,7 +49,6 @@ int main() {
   uart_sendfVal(-99219.345);
   uart_send_byte('\n');
   uart_sendhex8(0x88);
-  spi_transfer(a,b,4);
   
   while(1){
     //for (long i = 0; i < 500000; i++){PORTB |=(1<<5);}

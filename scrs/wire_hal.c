@@ -7,21 +7,19 @@ ISR(TWI_vect){
 
 
 static unsigned char wire_start(void){
-    unsigned char i=0;
+    unsigned short i=0;
     TWCR = (1<<TWINT)|(1<<TWSTA)|(1<<TWEN)|(1<<TWIE); // Sends start bit, allows enrupt
     //When TWINT is set Start condition was transmitted
     // Cheks if start conditions was meet if not it turns the LED on
     while(status != WIRE_START){
         i++;
         if(i>=WIRE_TIMEOUT){
-            DDRB|=(1<<PORTB5);
-            PORTB|=(1<<PORTB5);
             return WIRE_ERROR_START;
         }
     }
     return WIRE_OK;
 }
-static void wire_stop(vodi){
+static void wire_stop(void){
     TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO)|(1<<TWIE);
 }
 
@@ -33,8 +31,6 @@ static unsigned char wire_rstart(void){
     while(status != WIRE_RSTART){
         i++;
         if(i>=WIRE_TIMEOUT){
-            DDRB|=(1<<PORTB5);
-            PORTB|=(1<<PORTB5);
             return WIRE_ERROR_RSTART;
         }
     }
@@ -46,8 +42,6 @@ static unsigned char wire_addr_write_ack(void){
     while(status != WIRE_ADDR_ACK){
         i++;
         if(i>=WIRE_TIMEOUT){
-            DDRB|=(1<<PORTB5);
-            PORTB|=(1<<PORTB5);
             return WIRE_NACK;
         }
     }
@@ -60,8 +54,6 @@ static unsigned char wire_data_write_ack(void){
     while(status != WIRE_DATA_ACK){
         i++;
         if(i>=WIRE_TIMEOUT){
-            DDRB|=(1<<PORTB5);
-            PORTB|=(1<<PORTB5);
             return WIRE_NACK;
         }
     }
@@ -74,8 +66,6 @@ static unsigned char wire_addr_read_ack(void){
     while(status != WIRER_ADDR_ACK){
         i++;
         if(i>=WIRE_TIMEOUT){
-            DDRB|=(1<<PORTB5);
-            PORTB|=(1<<PORTB5);
             return WIRE_NACK;
         }
     }
@@ -83,7 +73,7 @@ static unsigned char wire_addr_read_ack(void){
 }
 
 static unsigned char wire_data_read_ack(unsigned char ack){
-    unsigned char i = 0;
+    unsigned short i = 0;
     
     if(ack!=0){
         //Sends acknoleged bite to slave
@@ -91,8 +81,6 @@ static unsigned char wire_data_read_ack(unsigned char ack){
         while(status != WIRER_DATA_ACK){
             i++;
             if(i>=WIRE_TIMEOUT){
-                DDRB|=(1<<PORTB5);
-                PORTB|=(1<<PORTB5);
                 return WIRE_NACK;
             }
         }
@@ -101,8 +89,6 @@ static unsigned char wire_data_read_ack(unsigned char ack){
         while(status != WIRER_DATA_NACK){
             i++;
             if(i>=WIRE_TIMEOUT){
-                DDRB|=(1<<PORTB5);
-                PORTB|=(1<<PORTB5);
                 return WIRE_NACK;
             }
         }
@@ -110,13 +96,9 @@ static unsigned char wire_data_read_ack(unsigned char ack){
     return WIRE_OK;
 }
 
-void wire_clockF(unsigned int freq,unsigned char pre){
-    if(pre==1)TWSR&=~(1<<TWPS1)|~(1<<TWPS0);
-    if(pre==4)TWSR&=~(1<<TWPS1);TWSR|=(1<<TWPS0);
-    if(pre==16)TWSR|=(1<<TWPS1);TWSR&=~(1<<TWPS0);
-    if(pre==64)TWSR|=(1<<TWPS1)|(1<<TWPS0);
+void wire_clockF(unsigned int freq){
 
-    TWBR = (unsigned char)(F_CPU/2/freq-8*pre);
+    TWBR = (F_CPU/2/freq-16)&0xFF;
     TWCR = (1<<TWEN)|(1<<TWIE);
 }
 
@@ -167,6 +149,7 @@ unsigned char wire_read(unsigned char sladdr,unsigned char reg,unsigned char *da
     }
     data[i] = TWDR; // reads the data recived by the
     wire_stop();
+    return err;
 } 
 
 
@@ -200,5 +183,38 @@ unsigned char wire_write(unsigned char sladdr,unsigned char reg,unsigned char *d
         }
     }
     wire_stop();
+    return err;
+}
+
+unsigned char wire_writeByte(unsigned char sladdr,unsigned char reg,unsigned char byte){ //Function to do a write operation on theTWI
+    //unsigned short i = 0;
+    unsigned char err=WIRE_OK;
+
+    err = wire_start();//Sends start and gets error code
+    if(err!=WIRE_OK){
+        wire_stop();
+        return err;
+    }
+    TWDR = (sladdr<<1)|0; // loads the slave address to the register, read bit is 0 because of 
+    err = wire_addr_write_ack();
+    if(err!=WIRE_OK){
+        wire_stop();
+        return err;
+    }
+    TWDR = reg;// loads the rgesiter from which we want to read to the device
+    err = wire_data_write_ack();
+    if(err!=WIRE_OK){
+        wire_stop();
+        return err;
+    }
+
+    TWDR = byte;// loads the data we want to send to the device
+    err = wire_data_write_ack();
+    if(err!=WIRE_OK){
+        wire_stop();
+        return err;
+    }
+    wire_stop();
+    return err;
 }
 

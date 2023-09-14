@@ -28,8 +28,9 @@ enum{
     WIRE_NACK
 };
 
-void wire_clockF(unsigned int freq,unsigned char pre);
+void wire_clockF(unsigned int freq);
 unsigned char wire_read(unsigned char sladdr,unsigned char reg,unsigned char *data,unsigned short len);
 unsigned char wire_write(unsigned char sladdr,unsigned char reg,unsigned char *data,unsigned short len);
+unsigned char wire_writeByte(unsigned char sladdr,unsigned char reg,unsigned char byte);
 
 #endif
