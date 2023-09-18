@@ -20,6 +20,7 @@
 #define WIRER_ADDR_NACK 0x48
 #define WIRER_DATA_ACK  0x50
 #define WIRER_DATA_NACK 0x58
+#define WIRE_NONE       0xF8
 
 enum{
     WIRE_OK,
@@ -28,7 +29,7 @@ enum{
     WIRE_NACK
 };
 
-void wire_clockF(unsigned int freq);
+void wire_clockF(unsigned long freq);
 unsigned char wire_read(unsigned char sladdr,unsigned char reg,unsigned char *data,unsigned short len);
 unsigned char wire_write(unsigned char sladdr,unsigned char reg,unsigned char *data,unsigned short len);
 unsigned char wire_writeByte(unsigned char sladdr,unsigned char reg,unsigned char byte);

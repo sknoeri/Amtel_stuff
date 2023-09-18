@@ -20,11 +20,11 @@ static unsigned char wire_start(void){
     return WIRE_OK;
 }
 static void wire_stop(void){
-    TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO)|(1<<TWIE);
+    TWCR = (1<<TWINT)|(1<<TWSTO)|(1<<TWEN)|(1<<TWIE);
 }
 
 static unsigned char wire_rstart(void){
-    unsigned char i=0;
+    unsigned short i=0;
     TWCR = (1<<TWINT)|(1<<TWSTA)|(1<<TWEN)|(1<<TWIE); // Sends start bit, allows enrupt
     //When TWINT is set Start condition was transmitted
     // Cheks if start conditions was meet if not it turns the LED on
@@ -37,7 +37,7 @@ static unsigned char wire_rstart(void){
     return WIRE_OK;
 }
 static unsigned char wire_addr_write_ack(void){
-    unsigned char i = 0;
+    unsigned short i = 0;
     TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWIE);
     while(status != WIRE_ADDR_ACK){
         i++;
@@ -49,7 +49,7 @@ static unsigned char wire_addr_write_ack(void){
 }
 
 static unsigned char wire_data_write_ack(void){
-    unsigned char i = 0;
+    unsigned short i = 0;
     TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWIE);
     while(status != WIRE_DATA_ACK){
         i++;
@@ -61,7 +61,7 @@ static unsigned char wire_data_write_ack(void){
 }
 
 static unsigned char wire_addr_read_ack(void){
-    unsigned char i = 0;
+    unsigned short i = 0;
     TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWIE);
     while(status != WIRER_ADDR_ACK){
         i++;
@@ -96,9 +96,10 @@ static unsigned char wire_data_read_ack(unsigned char ack){
     return WIRE_OK;
 }
 
-void wire_clockF(unsigned int freq){
-
-    TWBR = (F_CPU/2/freq-16)&0xFF;
+void wire_clockF(unsigned long freq){
+    
+    freq = (F_CPU/freq-8)/2;
+    TWBR = freq&0xFF;
     TWCR = (1<<TWEN)|(1<<TWIE);
 }
 

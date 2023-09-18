@@ -18,16 +18,18 @@ ISR(USART_RX_vect){//Recive interrupt vector
 ISR(USART_TX_vect){ //Transmit interrupt vector interups is fired when transmision is complet
     uart_tx_busy=1;
 }
-void uart_init(unsigned int baud, unsigned char fast_mode){
+void uart_init(unsigned long baud, unsigned char fast_mode){
     static unsigned char mode = 16;
     if(fast_mode !=1){
         UCSR0A |= (1<<U2X0);
         mode = 8;
+    }else{
+        UCSR0A &= ~(1<<U2X0);
     }
     baud = (F_CPU/mode/baud)-1;
     
-    UBRR0H = (unsigned char)(baud >> 8);
-    UBRR0L = (unsigned char)baud;
+    UBRR0H = (unsigned char)(baud >> 8); //0x00;//
+    UBRR0L = (unsigned char)baud; //0x08;//
     //Enable transmit and recive
     UCSR0B = (1<<TXEN0)|(1<<RXEN0);
     //Enable interrupt when trasmited or recived
