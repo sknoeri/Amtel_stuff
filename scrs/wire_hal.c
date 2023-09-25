@@ -98,9 +98,10 @@ static unsigned char wire_data_read_ack(unsigned char ack){
 
 void wire_clockF(unsigned long freq){
     
-    freq = (F_CPU/freq-8)/2;
+    freq = (F_CPU/freq-16)/2;
     TWBR = freq&0xFF;
     TWCR = (1<<TWEN)|(1<<TWIE);
+    PORTC |= (1 << PORTC5 | 1 << PORTC4); //Internal pulups activated needed for wire bus
 }
 
 unsigned char wire_read(unsigned char sladdr,unsigned char reg,unsigned char *data,unsigned short len){ //Function to do a write operation on theTWI
@@ -218,4 +219,3 @@ unsigned char wire_writeByte(unsigned char sladdr,unsigned char reg,unsigned cha
     wire_stop();
     return err;
 }
-

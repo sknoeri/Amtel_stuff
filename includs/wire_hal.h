@@ -2,9 +2,11 @@
 #define WIRE_HAL_
 #include "iom328p.h"
 #include "interrupt.h"
+#include "uart_hal.h"
+
 
 #define F_CPU 16000000U
-#define WIRE_TIMEOUT F_CPU/10000U
+#define WIRE_TIMEOUT 16000
 
 //Write operation TWSR codes
 #define WIRE_START      0x08
@@ -34,4 +36,4 @@ unsigned char wire_read(unsigned char sladdr,unsigned char reg,unsigned char *da
 unsigned char wire_write(unsigned char sladdr,unsigned char reg,unsigned char *data,unsigned short len);
 unsigned char wire_writeByte(unsigned char sladdr,unsigned char reg,unsigned char byte);
 
-#endif
+#endif/*WIRE_HAL_*/
