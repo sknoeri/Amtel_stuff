@@ -6,7 +6,7 @@
 
 
 #define F_CPU 16000000U
-#define WIRE_TIMEOUT 16000
+#define WIRE_TIMEOUT 1600
 
 //Write operation TWSR codes
 #define WIRE_START      0x08

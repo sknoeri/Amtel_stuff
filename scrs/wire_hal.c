@@ -10,8 +10,8 @@ static unsigned char wire_start(void){
     unsigned short i=0;
     TWCR = (1<<TWINT)|(1<<TWSTA)|(1<<TWEN)|(1<<TWIE); // Sends start bit, allows enrupt
     //When TWINT is set Start condition was transmitted
-    // Cheks if start conditions was meet if not it turns the LED on
-    while(status != WIRE_START){
+    // The interrupt is triggered and sets TWINT to zero
+    while(status != WIRE_START){ // chek if status register meet the start condition
         i++;
         if(i>=WIRE_TIMEOUT){
             return WIRE_ERROR_START;
@@ -51,6 +51,7 @@ static unsigned char wire_addr_write_ack(void){
 static unsigned char wire_data_write_ack(void){
     unsigned short i = 0;
     TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWIE);
+    // Clears interrupt flag fucks//enables bus and interupt wirte a data ack bite
     while(status != WIRE_DATA_ACK){
         i++;
         if(i>=WIRE_TIMEOUT){
@@ -144,7 +145,7 @@ unsigned char wire_read(unsigned char sladdr,unsigned char reg,unsigned char *da
         }
         data[i] = TWDR; // reads the data read out of the TWDR
     }
-    err = wire_data_read_ack(0);//waits until the recived and sends the ACK bit to request the next one
+    err = wire_data_read_ack(0);//No more data request needed so no more ack bit send
     if(err!=WIRE_OK){
         wire_stop();
         return err;
